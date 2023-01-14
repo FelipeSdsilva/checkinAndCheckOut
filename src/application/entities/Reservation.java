@@ -38,6 +38,8 @@ public class Reservation {
 
     public long duration() {
         LocalDate diff;
+
+        return 0L;
     }
 
     @Override
