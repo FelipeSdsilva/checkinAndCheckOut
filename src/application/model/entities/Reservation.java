@@ -3,6 +3,7 @@ package application.model.entities;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Reservation {
 
@@ -10,7 +11,7 @@ public class Reservation {
     private LocalDate checkIn;
     private LocalDate checkOut;
 
-    private final static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/HH/yyyy");
+    private final static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Reservation() {
     }
@@ -37,8 +38,8 @@ public class Reservation {
         return checkOut;
     }
 
-    public Duration durationOfDaysBetweenCheckINAndChecOut() {
-        return Duration.between(checkIn, checkOut);
+    public Duration durationOfDaysBetweenCheckINAndCheckOut() {
+        return Duration.between(getCheckIn().atTime(0, 0), getCheckOut().atTime(0, 0));
     }
 
     public void updateDate(LocalDate checkIn, LocalDate checkOut) {
@@ -50,8 +51,8 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "Room= " + getRoomOfNumber() +
-                ", check-In= " + fmt.format(getCheckIn()) +
-                ", check-Out= " + fmt.format(getCheckOut()) +
-                durationOfDaysBetweenCheckINAndChecOut().toDays() + " nights ";
+                ", check-In= " + getCheckIn().format(fmt) +
+                ", check-Out= " + getCheckOut().format(fmt) + ", " +
+                durationOfDaysBetweenCheckINAndCheckOut().toDays() + " nights }";
     }
 }
