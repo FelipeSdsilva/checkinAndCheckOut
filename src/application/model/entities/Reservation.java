@@ -1,5 +1,6 @@
-package application.entities;
+package application.model.entities;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -36,18 +37,21 @@ public class Reservation {
         return checkOut;
     }
 
-    public long duration() {
-        LocalDate diff;
+    public Duration durationOfDaysBetweenCheckINAndChecOut() {
+        return Duration.between(checkIn, checkOut);
+    }
 
-        return 0L;
+    public void updateDate(LocalDate checkIn, LocalDate checkOut) {
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
     }
 
     @Override
     public String toString() {
         return "Reservation{" +
-                "Room= " + roomOfNumber +
-                ", checkIn= " + fmt.format(checkIn) +
-                ", checkOut= " + fmt.format(checkOut) +
-                '}';
+                "Room= " + getRoomOfNumber() +
+                ", check-In= " + fmt.format(getCheckIn()) +
+                ", check-Out= " + fmt.format(getCheckOut()) +
+                durationOfDaysBetweenCheckINAndChecOut().toDays() + " nights ";
     }
 }
