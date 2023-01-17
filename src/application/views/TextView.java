@@ -10,4 +10,5 @@ public class TextView {
     public String errorInPastDate = "Error in reservation: Reservation dates for update must be future dates";
     public String errorInCheckOutDate = "Error in reservation: Check-out date must be after check-in date";
     public String continuationOfRegister = "Do you need to other reservation register(y/n)? ";
+    public String viewAllReservation = "Do you like viewer all reservations(y/n)?  ";
 }
