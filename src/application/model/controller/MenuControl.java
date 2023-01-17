@@ -1,5 +1,6 @@
 package application.model.controller;
 
+import application.model.entities.Reservation;
 import application.model.services.StaticService;
 import application.views.MenuView;
 
@@ -10,12 +11,15 @@ public class MenuControl {
     public static void InitMenu() {
 
         Scanner in = new Scanner(System.in);
+        StaticService svc = new StaticService();
+
+
         System.out.print(new MenuView().menuInit);
         int n = in.nextInt();
 
         switch (n) {
-            case 1 -> StaticService.newReservation();
-            case 2 -> StaticService.updateDateOfReservation();
+            case 1 -> svc.newReservation();
+            case 2 -> svc.updateDateOfReservation();
             case 3 -> StaticService.removeReservation();
             case 0 -> System.out.println(new MenuView().menuEnd);
             default -> MenuControl.InitMenu();
