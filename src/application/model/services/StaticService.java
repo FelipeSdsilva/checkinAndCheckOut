@@ -12,13 +12,12 @@ import java.util.Scanner;
 
 public class StaticService {
 
-    public static void newReservation() {
+    private Scanner in = new Scanner(System.in);
+    private static final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private char continues = 'y';
+    public Reservation reservation = new Reservation();
 
-        Scanner in = new Scanner(System.in);
-
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        List<Reservation> reservations = new ArrayList<>();
-        char continues = 'y';
+    public void newReservation() {
 
         while (continues != 'n') {
             System.out.print(new TextView().numberOfReservations);
@@ -36,14 +35,24 @@ public class StaticService {
 
                 System.out.print(new TextView().checkOut);
                 String checkOutDate = in.nextLine();
+
                 LocalDate checkOut = LocalDate.parse(checkOutDate, fmt);
 
-                reservations.add(new Reservation(room, checkIn, checkOut));
 
+                if (!checkOut.isAfter(checkIn)) {
+                    System.out.println(new TextView().errorInCheckOutDate);
+                } else if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+                    System.out.println(new TextView().errorInPastDate);
+                } else {
+                    reservation.addNewReservation(new Reservation(room, checkIn, checkOut));
+                }
             }
 
-            for (Reservation reservation : reservations) {
-                System.out.println(reservation);
+            System.out.print(new TextView().viewAllReservation);
+            continues = in.next().charAt(0);
+
+            if (continues == 'y') {
+                reservation.viewAllReservations(reservation.getReservations());
             }
 
             System.out.print(new TextView().continuationOfRegister);
@@ -51,11 +60,10 @@ public class StaticService {
         }
 
         MenuControl.InitMenu();
+
     }
 
-    public static void updateDateOfReservation() {
-        Scanner in = new Scanner(System.in);
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public void updateDateOfReservation() {
 
         System.out.println(new TextView().updateCheckInAndCheckOut);
 
@@ -67,9 +75,17 @@ public class StaticService {
         String checkOutDate = in.nextLine();
         LocalDate checkOut = LocalDate.parse(checkOutDate, fmt);
 
-
+        if (!checkOut.isAfter(checkIn)) {
+            System.out.println(new TextView().errorInCheckOutDate);
+        } else if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+            System.out.println(new TextView().errorInPastDate);
+        } else {
+            reservation.updateDate(checkIn, checkOut);
+        }
     }
 
     public static void removeReservation() {
     }
+
+
 }
