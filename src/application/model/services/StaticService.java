@@ -2,10 +2,12 @@ package application.model.services;
 
 import application.model.controller.MenuControl;
 import application.model.entities.Reservation;
+import application.model.exceptions.DomainException;
 import application.views.TextView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,7 +19,7 @@ public class StaticService {
     private char continues = 'y';
     public Reservation reservation = new Reservation();
 
-    public void newReservation() {
+    public void newReservation() throws DomainException {
 
         while (continues != 'n') {
             System.out.print(new TextView().numberOfReservations);
@@ -25,26 +27,25 @@ public class StaticService {
 
             for (int i = 0; i < n; i++) {
 
-                System.out.print(new TextView().room);
-                Integer room = in.nextInt();
-                in.nextLine();
+                try {
+                    System.out.print(new TextView().room);
+                    Integer room = in.nextInt();
+                    in.nextLine();
 
-                System.out.print(new TextView().checkIn);
-                String checkInDate = in.nextLine();
-                LocalDate checkIn = LocalDate.parse(checkInDate, fmt);
+                    System.out.print(new TextView().checkIn);
+                    String checkInDate = in.nextLine();
+                    LocalDate checkIn = LocalDate.parse(checkInDate, fmt);
 
-                System.out.print(new TextView().checkOut);
-                String checkOutDate = in.nextLine();
+                    System.out.print(new TextView().checkOut);
+                    String checkOutDate = in.nextLine();
 
-                LocalDate checkOut = LocalDate.parse(checkOutDate, fmt);
+                    LocalDate checkOut = LocalDate.parse(checkOutDate, fmt);
 
-
-                if (!checkOut.isAfter(checkIn)) {
-                    System.out.println(new TextView().errorInCheckOutDate);
-                } else if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
-                    System.out.println(new TextView().errorInPastDate);
-                } else {
                     reservation.addNewReservation(new Reservation(room, checkIn, checkOut));
+                } catch (DateTimeParseException e) {
+                    System.out.println("Error in date");
+                } catch (DomainException e) {
+                    System.out.println(e.getMessage());
                 }
             }
 
@@ -63,7 +64,7 @@ public class StaticService {
 
     }
 
-    public void updateDateOfReservation() {
+    public void updateDateOfReservation() throws DomainException {
 
         System.out.println(new TextView().updateCheckInAndCheckOut);
 
