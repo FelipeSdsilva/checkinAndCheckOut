@@ -1,5 +1,6 @@
 package application.model.entities;
 
+import application.model.exceptions.DomainException;
 import application.views.TextView;
 
 import java.time.Duration;
@@ -21,7 +22,10 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer roomOfNumber, LocalDate checkIn, LocalDate checkOut) {
+    public Reservation(Integer roomOfNumber, LocalDate checkIn, LocalDate checkOut) throws DomainException {
+        if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+            throw new DomainException(new TextView().errorInPastDate);
+        }
         this.roomOfNumber = roomOfNumber;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -60,17 +64,17 @@ public class Reservation {
     }
 
 
-    public String updateDate(LocalDate checkIn, LocalDate checkOut) {
+    public void updateDate(LocalDate checkIn, LocalDate checkOut) throws DomainException {
 
         if (!checkOut.isAfter(checkIn)) {
-            return new TextView().errorInCheckOutDate;
+            throw new DomainException(new TextView().errorInCheckOutDate);
         }
         if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
-            return new TextView().errorInPastDate;
+            throw new DomainException(new TextView().errorInPastDate);
         }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        return null;
+
     }
 
     public static void viewAllReservations(List<Reservation> reservations) {
