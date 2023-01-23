@@ -75,13 +75,9 @@ public class StaticService {
         String checkOutDate = in.nextLine();
         LocalDate checkOut = LocalDate.parse(checkOutDate, fmt);
 
-        if (!checkOut.isAfter(checkIn)) {
-            System.out.println(new TextView().errorInCheckOutDate);
-        } else if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
-            System.out.println(new TextView().errorInPastDate);
-        } else {
-            reservation.updateDate(checkIn, checkOut);
-        }
+
+        reservation.updateDate(checkIn, checkOut);
+
     }
 
     public static void removeReservation() {

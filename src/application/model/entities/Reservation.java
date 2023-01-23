@@ -1,5 +1,7 @@
 package application.model.entities;
 
+import application.views.TextView;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,9 +60,17 @@ public class Reservation {
     }
 
 
-    public void updateDate(LocalDate checkIn, LocalDate checkOut) {
+    public String updateDate(LocalDate checkIn, LocalDate checkOut) {
+
+        if (!checkOut.isAfter(checkIn)) {
+            return new TextView().errorInCheckOutDate;
+        }
+        if (checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+            return new TextView().errorInPastDate;
+        }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        return null;
     }
 
     public static void viewAllReservations(List<Reservation> reservations) {
